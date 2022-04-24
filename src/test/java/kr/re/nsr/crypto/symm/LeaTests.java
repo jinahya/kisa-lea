@@ -8,7 +8,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 final class LeaTests {
@@ -18,13 +20,13 @@ final class LeaTests {
                 .filter(BlockCipherModeBlock.class::isAssignableFrom);
     }
 
-    public static void acceptBlockCipherModeBlockInstances(final Consumer<? super BlockCipherModeBlock> consumer) {
+    public static void acceptBlockCipherModeBlockInstances(final BiConsumer<? super Class<?>, ? super BlockCipherModeBlock> consumer) {
         Objects.requireNonNull(consumer, "consumer is null");
         blockCipherModeBlockClasses().forEach(c -> {
             try {
                 final Constructor<?> constructor = c.getConstructor();
                 final BlockCipherModeBlock instance = (BlockCipherModeBlock) constructor.newInstance();
-                consumer.accept(instance);
+                consumer.accept(c, instance);
             } catch (final ReflectiveOperationException roe) {
                 throw new RuntimeException(roe);
             }
@@ -60,6 +62,22 @@ final class LeaTests {
             }
             consumer.accept(key);
         }
+    }
+
+    public static IntStream keySizeStream() {
+        return IntStream.of(128, 192, 256);
+    }
+
+    public static Stream<byte[]> keyBytesStream() {
+        return keySizeStream().mapToObj(size -> {
+            final var key = new byte[size / Byte.SIZE];
+            try {
+                SecureRandom.getInstanceStrong().nextBytes(key);
+            } catch (final NoSuchAlgorithmException nsae) {
+                throw new RuntimeException(nsae);
+            }
+            return key;
+        });
     }
 
     private LeaTests() {
