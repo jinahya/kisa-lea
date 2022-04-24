@@ -1,5 +1,6 @@
 package kr.re.nsr.crypto.symm;
 
+import com.github.jinahya.kisa.lea.LeaTestUtils;
 import kr.re.nsr.crypto.BlockCipher;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,11 +19,7 @@ class LEA_OFB_Test {
     void encrypt__(final byte[] key) throws NoSuchAlgorithmException {
         final var random = SecureRandom.getInstanceStrong();
         final var cipher = new LEA.CTR();
-        final byte[] iv;
-        {
-            iv = new byte[16];
-            random.nextBytes(iv);
-        }
+        final byte[] iv = LeaTestUtils.iv(random);
         cipher.init(BlockCipher.Mode.ENCRYPT, key, iv);
         final byte[] plain;
         {
@@ -39,11 +36,7 @@ class LEA_OFB_Test {
     void decrypt__(final byte[] key) throws NoSuchAlgorithmException {
         final var random = SecureRandom.getInstanceStrong();
         final var cipher = new LEA.CTR();
-        final byte[] iv;
-        {
-            iv = new byte[16];
-            random.nextBytes(iv);
-        }
+        final byte[] iv = LeaTestUtils.iv(random);
         final byte[] plain;
         {
             plain = new byte[16 << random.nextInt(3)];

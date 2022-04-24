@@ -1,5 +1,6 @@
 package kr.re.nsr.crypto.symm;
 
+import com.github.jinahya.kisa.lea.AeadTestUtils;
 import kr.re.nsr.crypto.BlockCipher;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,25 +19,9 @@ class LEA_CCM_Test {
     void encrypt__(final byte[] key) throws NoSuchAlgorithmException {
         final var random = SecureRandom.getInstanceStrong();
         final var cipher = new LEA.CCM();
-        final byte[] nonce;
-        {
-            nonce = new byte[random.nextInt(7) + 7];
-            random.nextBytes(nonce);
-            assertThat(nonce.length)
-                    .isGreaterThanOrEqualTo(7)
-                    .isLessThanOrEqualTo(13);
-        }
-        final int taglen;
-        {
-            taglen = (random.nextInt(7) + 2) << 1;
-            assertThat(taglen).isEven().isIn(4, 6, 8, 10, 12, 14, 16);
-        }
-        cipher.init(BlockCipher.Mode.ENCRYPT, key, nonce, taglen);
-        final byte[] aad;
-        {
-            aad = new byte[taglen];
-            random.nextBytes(aad);
-        }
+        final byte[] nonce = AeadTestUtils.nonceForCcm(random);
+        final byte[] aad = AeadTestUtils.aadForCcm(random);
+        cipher.init(BlockCipher.Mode.ENCRYPT, key, nonce, aad.length);
         cipher.updateAAD(aad);
         for (int i = 0; i < 4; i++) {
             final var msg = new byte[random.nextInt(16)];
@@ -59,34 +44,18 @@ class LEA_CCM_Test {
             random.nextBytes(plain);
             log.debug("    plain: {}", plain);
         }
-        final int taglen;
-        {
-            taglen = (random.nextInt(7) + 2) << 1;
-            assertThat(taglen).isEven().isIn(4, 6, 8, 10, 12, 14, 16);
-        }
-        final byte[] nonce;
-        {
-            nonce = new byte[random.nextInt(7) + 7]; // 7 ~ 13 bytes
-            random.nextBytes(nonce);
-            assertThat(nonce.length)
-                    .isGreaterThanOrEqualTo(7)
-                    .isLessThanOrEqualTo(13);
-        }
-        final byte[] aad;
-        {
-            aad = new byte[taglen];
-            random.nextBytes(aad);
-        }
+        final byte[] nonce = AeadTestUtils.nonceForCcm(random);
+        final byte[] aad = AeadTestUtils.aadForCcm(random);
         final byte[] encrypted;
         {
-            cipher.init(BlockCipher.Mode.ENCRYPT, key, nonce, taglen);
+            cipher.init(BlockCipher.Mode.ENCRYPT, key, nonce, aad.length);
             cipher.updateAAD(aad);
             encrypted = cipher.doFinal(plain);
             log.debug("encrypted: {}", encrypted);
         }
         final byte[] decrypted;
         {
-            cipher.init(BlockCipher.Mode.DECRYPT, key, nonce, taglen);
+            cipher.init(BlockCipher.Mode.DECRYPT, key, nonce, aad.length);
             cipher.updateAAD(aad);
             decrypted = cipher.doFinal(encrypted);
             log.debug("decrypted: {}", decrypted);

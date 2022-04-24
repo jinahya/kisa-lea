@@ -1,5 +1,7 @@
 package kr.re.nsr.crypto.symm;
 
+import com.github.jinahya.kisa.lea.LeaConstants;
+import com.github.jinahya.kisa.lea.LeaTestUtils;
 import kr.re.nsr.crypto.BlockCipher;
 import kr.re.nsr.crypto.padding.PKCS5Padding;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +21,9 @@ class LEA_CBC_Test {
     void encrypt__(final byte[] key) throws NoSuchAlgorithmException {
         final var random = SecureRandom.getInstanceStrong();
         final var cipher = new LEA.CBC();
-        final byte[] iv;
-        {
-            iv = new byte[16];
-            random.nextBytes(iv);
-        }
+        final byte[] iv = LeaTestUtils.iv(random);
         cipher.init(BlockCipher.Mode.ENCRYPT, key, iv);
-        cipher.setPadding(new PKCS5Padding(16));
+        cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
         for (int i = 0; i < 8; i++) {
             final byte[] msg;
             {
@@ -44,11 +42,7 @@ class LEA_CBC_Test {
     void decrypt__(final byte[] key) throws NoSuchAlgorithmException {
         final var random = SecureRandom.getInstanceStrong();
         final var cipher = new LEA.CBC();
-        final byte[] iv;
-        {
-            iv = new byte[16];
-            random.nextBytes(iv);
-        }
+        final byte[] iv = LeaTestUtils.iv(random);
         final byte[] plain;
         {
             plain = new byte[random.nextInt(8)];
@@ -58,15 +52,20 @@ class LEA_CBC_Test {
         final byte[] encrypted;
         {
             cipher.init(BlockCipher.Mode.ENCRYPT, key, iv);
-            cipher.setPadding(new PKCS5Padding(16));
+            cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
             encrypted = cipher.doFinal(plain);
             log.debug("encrypted: {}", encrypted);
+            assertThat(encrypted.length)
+                    .satisfies(l -> {
+                        assertThat(l % LeaConstants.BLOCK_BYTES)
+                                .isZero();
+                    });
         }
         final byte[] decrypted;
         {
             cipher.reset();
             cipher.init(BlockCipher.Mode.DECRYPT, key, iv);
-            cipher.setPadding(new PKCS5Padding(16));
+            cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
             decrypted = cipher.doFinal(encrypted);
             log.debug("decrypted: {}", decrypted);
         }
