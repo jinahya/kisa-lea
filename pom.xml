@@ -193,7 +193,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Automatic-Module-Name>com.github.jinahya.kr.re.nsr.crypto</Automatic-Module-Name>
+              <Automatic-Module-Name>com.github.jinahya.kisa.lea</Automatic-Module-Name>
             </manifestEntries>
           </archive>
         </configuration>
