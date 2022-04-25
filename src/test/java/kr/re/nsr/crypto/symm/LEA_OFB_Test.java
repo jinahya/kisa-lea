@@ -18,7 +18,7 @@ class LEA_OFB_Test {
     @ParameterizedTest
     void encrypt__(final byte[] key) throws NoSuchAlgorithmException {
         final var random = SecureRandom.getInstanceStrong();
-        final var cipher = new LEA.CTR();
+        final var cipher = new LEA.OFB();
         final byte[] iv = LeaTestUtils.iv(random);
         cipher.init(BlockCipher.Mode.ENCRYPT, key, iv);
         final byte[] plain;
@@ -35,7 +35,7 @@ class LEA_OFB_Test {
     @ParameterizedTest
     void decrypt__(final byte[] key) throws NoSuchAlgorithmException {
         final var random = SecureRandom.getInstanceStrong();
-        final var cipher = new LEA.CTR();
+        final var cipher = new LEA.OFB();
         final byte[] iv = LeaTestUtils.iv(random);
         final byte[] plain;
         {

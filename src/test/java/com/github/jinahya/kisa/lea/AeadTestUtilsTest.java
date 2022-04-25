@@ -35,7 +35,7 @@ class AeadTestUtilsTest {
 
     @Test
     void taglenForGcm_Between4And16_() throws NoSuchAlgorithmException {
-        final var taglen = AeadTestUtils.taglenForGcm(SecureRandom.getInstanceStrong());
+        final var taglen = AeadTestUtils.tagLenForGcm(SecureRandom.getInstanceStrong());
         assertThat(taglen)
                 .isGreaterThanOrEqualTo(4)
                 .isLessThanOrEqualTo(16);

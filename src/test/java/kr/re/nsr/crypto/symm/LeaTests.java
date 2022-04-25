@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
@@ -68,16 +69,18 @@ final class LeaTests {
         return IntStream.of(128, 192, 256);
     }
 
-    public static Stream<byte[]> keyBytesStream() {
-        return keySizeStream().mapToObj(size -> {
-            final var key = new byte[size / Byte.SIZE];
-            try {
-                SecureRandom.getInstanceStrong().nextBytes(key);
-            } catch (final NoSuchAlgorithmException nsae) {
-                throw new RuntimeException(nsae);
-            }
+    public static Stream<byte[]> keyBytesStream(final Random random) {
+        Objects.requireNonNull(random, "random is null");
+        return keySizeStream().mapToObj(keySize -> {
+            final var key = new byte[keySize / Byte.SIZE];
+            random.nextBytes(key);
             return key;
         });
+    }
+
+    public static Stream<byte[]> keyBytesStream() throws NoSuchAlgorithmException {
+        final SecureRandom random = SecureRandom.getInstanceStrong();
+        return keyBytesStream(SecureRandom.getInstanceStrong());
     }
 
     private LeaTests() {

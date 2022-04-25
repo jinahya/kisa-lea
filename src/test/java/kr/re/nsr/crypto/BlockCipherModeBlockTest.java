@@ -1,9 +1,9 @@
 package kr.re.nsr.crypto;
 
-abstract class BlockCipherModeBlockTest<T extends BlockCipherModeBlock>
+public abstract class BlockCipherModeBlockTest<T extends BlockCipherModeBlock>
         extends BlockCipherModeTest<T> {
 
-    BlockCipherModeBlockTest(final Class<T> cipherClass) {
-        super(cipherClass);
+    protected BlockCipherModeBlockTest(final Class<T> modeClass) {
+        super(modeClass);
     }
 }

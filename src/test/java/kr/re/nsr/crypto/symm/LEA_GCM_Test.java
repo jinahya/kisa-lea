@@ -20,8 +20,9 @@ class LEA_GCM_Test {
         final var random = SecureRandom.getInstanceStrong();
         final var cipher = new LEA.GCM();
         final byte[] nonce = AeadTestUtils.nonceForGcm(random, 128);
-        final byte[] aad = AeadTestUtils.aadForCcm(random);
-        cipher.init(BlockCipher.Mode.ENCRYPT, key, nonce, aad.length);
+        final byte[] aad = AeadTestUtils.aadForGcm(random);
+        final int taglen = AeadTestUtils.tagLenForGcm(random);
+        cipher.init(BlockCipher.Mode.ENCRYPT, key, nonce, taglen);
         cipher.updateAAD(aad);
         for (int i = 0; i < 4; i++) {
             final var msg = new byte[random.nextInt(16)];
@@ -45,17 +46,18 @@ class LEA_GCM_Test {
             log.debug("    plain: {}", plain);
         }
         final byte[] nonce = AeadTestUtils.nonceForGcm(random, 128);
-        final byte[] aad = AeadTestUtils.aadForCcm(random);
+        final int taglen = AeadTestUtils.tagLenForGcm(random);
+        final byte[] aad = AeadTestUtils.aadForGcm(random);
         final byte[] encrypted;
         {
-            cipher.init(BlockCipher.Mode.ENCRYPT, key, nonce, aad.length);
+            cipher.init(BlockCipher.Mode.ENCRYPT, key, nonce, taglen);
             cipher.updateAAD(aad);
             encrypted = cipher.doFinal(plain);
             log.debug("encrypted: {}", encrypted);
         }
         final byte[] decrypted;
         {
-            cipher.init(BlockCipher.Mode.DECRYPT, key, nonce, aad.length);
+            cipher.init(BlockCipher.Mode.DECRYPT, key, nonce, taglen);
             cipher.updateAAD(aad);
             decrypted = cipher.doFinal(encrypted);
             log.debug("decrypted: {}", decrypted);

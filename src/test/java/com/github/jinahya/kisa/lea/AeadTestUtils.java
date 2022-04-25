@@ -12,14 +12,14 @@ public final class AeadTestUtils {
         return nonce;
     }
 
-    static int taglenForCcm(final Random random) {
+    public static int taglenForCcm(final Random random) {
         Objects.requireNonNull(random, "random is null");
         return (random.nextInt(7) + 2) << 1;
     }
 
     public static byte[] aadForCcm(final Random random) {
         Objects.requireNonNull(random, "random is null");
-        final byte[] aad = new byte[taglenForCcm(random)];
+        final byte[] aad = new byte[random.nextInt(65536)];
         random.nextBytes(aad);
         return aad;
     }
@@ -31,12 +31,12 @@ public final class AeadTestUtils {
         return nonce;
     }
 
-    static int taglenForGcm(final Random random) {
+    public static int tagLenForGcm(final Random random) {
         return random.nextInt(13) + 4;
     }
 
-    static byte[] aadForGcm(final Random random) {
-        final byte[] aad = new byte[taglenForGcm(random)];
+    public static byte[] aadForGcm(final Random random) {
+        final byte[] aad = new byte[random.nextInt(65536)];
         random.nextBytes(aad);
         return aad;
     }
