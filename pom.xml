@@ -446,7 +446,7 @@
   </reporting>
   <profiles>
     <profile>
-      <id>toolchain-jdk11</id>
+      <id>jdk11</id>
       <build>
         <plugins>
           <plugin>
