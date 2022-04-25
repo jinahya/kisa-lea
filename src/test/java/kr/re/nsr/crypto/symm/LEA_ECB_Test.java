@@ -25,7 +25,8 @@ class LEA_ECB_Test {
         for (int i = 0; i < 4; i++) {
             final var msg = new byte[random.nextInt(128)];
             random.nextBytes(msg);
-            cipher.update(msg);
+            final var result = cipher.update(msg);
+            assertThat(result).isNotNull();
         }
         final var encrypted = cipher.doFinal();
         log.debug("encrypted: {}", encrypted);

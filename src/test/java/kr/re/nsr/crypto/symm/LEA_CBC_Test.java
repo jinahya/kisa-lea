@@ -25,13 +25,11 @@ class LEA_CBC_Test {
         final byte[] iv = LeaTestUtils.iv(random);
         cipher.init(BlockCipher.Mode.ENCRYPT, key, iv);
         cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
-        for (int i = 0; i < 8; i++) {
-            final byte[] msg;
-            {
-                msg = new byte[random.nextInt(1024)];
-                random.nextBytes(msg);
-            }
-            cipher.update(msg);
+        for (int i = 0; i < 4; i++) {
+            final byte[] msg = new byte[random.nextInt(1024)];
+            random.nextBytes(msg);
+            final var result = cipher.update(msg);
+            assertThat(result).isNotNull();
         }
         final var encrypted = cipher.doFinal();
         log.debug("encrypted: {}", encrypted);
