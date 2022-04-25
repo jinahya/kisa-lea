@@ -4,6 +4,7 @@ import com.github.jinahya.kisa.lea.LeaConstants;
 import com.github.jinahya.kisa.lea.LeaTestUtils;
 import kr.re.nsr.crypto.BlockCipher;
 import kr.re.nsr.crypto.padding.PKCS5Padding;
+import kr.re.nsr.crypto.util.Hex;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -47,14 +48,14 @@ class LEA_CBC_Test {
         {
             plain = new byte[random.nextInt(8)];
             random.nextBytes(plain);
-            log.debug("    plain: {}", plain);
+            log.debug("    plain: {}", Hex.toHexString(plain));
         }
         final byte[] encrypted;
         {
             cipher.init(BlockCipher.Mode.ENCRYPT, key, iv);
             cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
             encrypted = cipher.doFinal(plain);
-            log.debug("encrypted: {}", encrypted);
+            log.debug("encrypted: {}", Hex.toHexString(encrypted));
             assertThat(encrypted.length)
                     .satisfies(l -> {
                         assertThat(l % LeaConstants.BLOCK_BYTES)
@@ -67,7 +68,7 @@ class LEA_CBC_Test {
             cipher.init(BlockCipher.Mode.DECRYPT, key, iv);
             cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
             decrypted = cipher.doFinal(encrypted);
-            log.debug("decrypted: {}", decrypted);
+            log.debug("decrypted: {}", Hex.toHexString(decrypted));
         }
         assertThat(decrypted).isEqualTo(plain);
     }
