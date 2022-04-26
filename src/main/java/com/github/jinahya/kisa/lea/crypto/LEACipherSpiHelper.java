@@ -1,6 +1,6 @@
 package com.github.jinahya.kisa.lea.crypto;
 
-import com.github.jinahya.kisa.lea.LeaConstants;
+import com.github.jinahya.kisa.lea.LEAConstants;
 import com.github.jinahya.kisa.lea.crypto.spec.LEAGCMParameterSpec;
 import kr.re.nsr.crypto.BlockCipher;
 import kr.re.nsr.crypto.Padding;
@@ -45,10 +45,10 @@ final class LEACipherSpiHelper {
     }
 
     private static Padding padding(final String padding) throws NoSuchPaddingException {
-        if (padding.equals(LeaConstants.PADDING_PKCS5_PADDING)) {
+        if (padding.equals(LEAConstants.PADDING_PKCS5_PADDING)) {
             return new PKCS5Padding(16);
         }
-        if (padding.equals(LeaConstants.PADDING_NO_PADDING)) {
+        if (padding.equals(LEAConstants.PADDING_NO_PADDING)) {
             return null;
         }
         throw new NoSuchPaddingException("unsupported padding: " + padding);

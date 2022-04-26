@@ -1,6 +1,6 @@
 package com.github.jinahya.kisa.lea.crypto;
 
-import com.github.jinahya.kisa.lea.LeaConstants;
+import com.github.jinahya.kisa.lea.LEAConstants;
 import kr.re.nsr.crypto.symm.LEA;
 
 import javax.crypto.BadPaddingException;
@@ -47,7 +47,7 @@ class LEACipherSpi
     @Override
     protected int engineGetBlockSize() {
         if (true) {
-            return LeaConstants.BLOCK_BYTES;
+            return LEAConstants.BLOCK_BYTES;
         }
         return LEACipherSpiHelper.engineGetBlockSize(engine(false));
     }
