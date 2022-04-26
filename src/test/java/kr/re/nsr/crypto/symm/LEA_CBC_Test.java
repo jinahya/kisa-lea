@@ -1,6 +1,6 @@
 package kr.re.nsr.crypto.symm;
 
-import com.github.jinahya.kisa.lea.LeaConstants;
+import com.github.jinahya.kisa.lea.LEAConstants;
 import com.github.jinahya.kisa.lea.LeaTestUtils;
 import kr.re.nsr.crypto.BlockCipher;
 import kr.re.nsr.crypto.padding.PKCS5Padding;
@@ -24,7 +24,7 @@ class LEA_CBC_Test {
         final var cipher = new LEA.CBC();
         final byte[] iv = LeaTestUtils.iv(random);
         cipher.init(BlockCipher.Mode.ENCRYPT, key, iv);
-        cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
+        cipher.setPadding(new PKCS5Padding(LEAConstants.BLOCK_BYTES));
         for (int i = 0; i < 4; i++) {
             final byte[] msg = new byte[random.nextInt(1024)];
             random.nextBytes(msg);
@@ -51,12 +51,12 @@ class LEA_CBC_Test {
         final byte[] encrypted;
         {
             cipher.init(BlockCipher.Mode.ENCRYPT, key, iv);
-            cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
+            cipher.setPadding(new PKCS5Padding(LEAConstants.BLOCK_BYTES));
             encrypted = cipher.doFinal(plain);
             log.debug("encrypted: {}", Hex.toHexString(encrypted));
             assertThat(encrypted.length)
                     .satisfies(l -> {
-                        assertThat(l % LeaConstants.BLOCK_BYTES)
+                        assertThat(l % LEAConstants.BLOCK_BYTES)
                                 .isZero();
                     });
         }
@@ -64,7 +64,7 @@ class LEA_CBC_Test {
         {
             cipher.reset();
             cipher.init(BlockCipher.Mode.DECRYPT, key, iv);
-            cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
+            cipher.setPadding(new PKCS5Padding(LEAConstants.BLOCK_BYTES));
             decrypted = cipher.doFinal(encrypted);
             log.debug("decrypted: {}", Hex.toHexString(decrypted));
         }

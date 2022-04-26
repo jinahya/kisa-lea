@@ -1,6 +1,6 @@
 package kr.re.nsr.crypto.symm;
 
-import com.github.jinahya.kisa.lea.LeaConstants;
+import com.github.jinahya.kisa.lea.LEAConstants;
 import kr.re.nsr.crypto.BlockCipher;
 import kr.re.nsr.crypto.padding.PKCS5Padding;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ class LEA_ECB_Test {
         final var random = SecureRandom.getInstanceStrong();
         final var cipher = new LEA.ECB();
         cipher.init(BlockCipher.Mode.ENCRYPT, key);
-        cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
+        cipher.setPadding(new PKCS5Padding(LEAConstants.BLOCK_BYTES));
         for (int i = 0; i < 4; i++) {
             final var msg = new byte[random.nextInt(128)];
             random.nextBytes(msg);
@@ -47,12 +47,12 @@ class LEA_ECB_Test {
         final byte[] encrypted;
         {
             cipher.init(BlockCipher.Mode.ENCRYPT, key);
-            cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
+            cipher.setPadding(new PKCS5Padding(LEAConstants.BLOCK_BYTES));
             encrypted = cipher.doFinal(plain);
             log.debug("encrypted: {}", encrypted);
             assertThat(encrypted.length)
                     .satisfies(l -> {
-                        assertThat(l % LeaConstants.BLOCK_BYTES)
+                        assertThat(l % LEAConstants.BLOCK_BYTES)
                                 .isZero();
                     });
         }
@@ -60,7 +60,7 @@ class LEA_ECB_Test {
         {
             cipher.reset();
             cipher.init(BlockCipher.Mode.DECRYPT, key);
-            cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
+            cipher.setPadding(new PKCS5Padding(LEAConstants.BLOCK_BYTES));
             decrypted = cipher.doFinal(encrypted);
             log.debug("decrypted: {}", decrypted);
         }
