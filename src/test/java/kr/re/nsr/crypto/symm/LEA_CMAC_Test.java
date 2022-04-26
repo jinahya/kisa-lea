@@ -1,6 +1,6 @@
 package kr.re.nsr.crypto.symm;
 
-import com.github.jinahya.kisa.lea.LeaConstants;
+import com.github.jinahya.kisa.lea.LEAConstants;
 import kr.re.nsr.crypto.util.Hex;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,7 +34,7 @@ class LEA_CMAC_Test {
             final var finalized = mac.doFinal(plain);
             log.debug("finalized: ({}) {}", finalized.length, Hex.toHexString(finalized));
             assertThat(finalized)
-                    .hasSize(LeaConstants.BLOCK_BYTES);
+                    .hasSize(LEAConstants.BLOCK_BYTES);
             if (set.isEmpty()) {
                 set.add(Arrays.hashCode(finalized));
             } else {

@@ -3,7 +3,12 @@ package com.github.jinahya.kisa.lea;
 import java.util.Arrays;
 import java.util.List;
 
-public final class LeaConstants {
+public final class LEAConstants {
+
+    /**
+     * The name of the LEA algorithm. The value is {@value}.
+     */
+    public static final String ALGORITHM_NAME = "LEA";
 
     /**
      * The block size, in bits, of LEA. The value is {@value}.
@@ -18,9 +23,9 @@ public final class LeaConstants {
     /**
      * An unmodifiable list of applicable key sizes which contains {@code 128}, {@code 192}, and {@code 256}.
      */
-    public static final List<Integer> KEY_SIZES = Arrays.asList(128, 192, 256);
+    static final List<Integer> KEY_SIZES = Arrays.asList(128, 192, 256);
 
-    private LeaConstants() {
+    private LEAConstants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

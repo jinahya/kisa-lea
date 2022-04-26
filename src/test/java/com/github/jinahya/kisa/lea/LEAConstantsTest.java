@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LeaConstantsTest {
+class LEAConstantsTest {
 
     @Test
     void BLOCK_SIZE__() {
-        assertThat(LeaConstants.BLOCK_SIZE) // NOSONAR
+        assertThat(LEAConstants.BLOCK_SIZE) // NOSONAR
                 .satisfies(v -> {
                     assertThat(v % Byte.SIZE).isZero();
                 });
@@ -16,13 +16,13 @@ class LeaConstantsTest {
 
     @Test
     void BLOCK_BYTES__() {
-        assertThat(LeaConstants.BLOCK_BYTES) // NOSONAR
-                .isEqualTo(LeaConstants.BLOCK_SIZE / Byte.SIZE);
+        assertThat(LEAConstants.BLOCK_BYTES) // NOSONAR
+                .isEqualTo(LEAConstants.BLOCK_SIZE / Byte.SIZE);
     }
 
     @Test
     void KEY_SIZES__() {
-        assertThat(LeaConstants.KEY_SIZES)
+        assertThat(LEAConstants.KEY_SIZES)
                 .isNotEmpty()
                 .doesNotContainNull()
                 .allSatisfy(v -> {
