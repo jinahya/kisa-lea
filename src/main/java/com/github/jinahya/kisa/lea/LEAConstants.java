@@ -5,15 +5,30 @@ import java.util.List;
 
 public final class LEAConstants {
 
-    /**
-     * The name of the LEA algorithm. The value is {@value}.
-     */
-    public static final String ALGORITHM_NAME = "LEA";
+    public static final String ALGORITHM = "AES";
+
+    public static final String MODE_ECB = "ECB";
+
+    public static final String MODE_CBC = "CBC";
+
+    public static final String MODE_CTR = "CTR";
+
+    public static final String MODE_CFB = "CFB";
+
+    public static final String MODE_OFB = "OFB";
+
+    public static final String MODE_CCM = "CCM";
+
+    public static final String MODE_GCM = "GCM";
+
+    public static final String PADDING_PKCS5_PADDING = "PKCS5Padding";
+
+    public static final String PADDING_NO_PADDING = "NoPadding";
 
     /**
      * The block size, in bits, of LEA. The value is {@value}.
      */
-    public static final int BLOCK_SIZE = 128;
+    static final int BLOCK_SIZE = 128;
 
     /**
      * The block size, in bytes, of LEA. The value is {@value}.
