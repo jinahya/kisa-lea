@@ -3,7 +3,7 @@ package com.github.jinahya.kisa.lea;
 import java.util.Arrays;
 import java.util.List;
 
-public final class LeaConstants {
+public final class LEAConstants {
 
     public static final String ALGORITHM = "AES";
 
@@ -40,7 +40,7 @@ public final class LeaConstants {
      */
     static final List<Integer> KEY_SIZES = Arrays.asList(128, 192, 256);
 
-    private LeaConstants() {
+    private LEAConstants() {
         throw new AssertionError("instantiation is not allowed");
     }
 }
