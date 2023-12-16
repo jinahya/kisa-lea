@@ -10,7 +10,7 @@ import kr.re.nsr.crypto.symm.LEA;
 import java.lang.reflect.Constructor;
 import java.security.NoSuchAlgorithmException;
 
-class LeaFactory {
+class ModeFactory {
 
     private static <T extends BlockCipherMode> T newInstance(final Class<T> type, final String name)
             throws NoSuchAlgorithmException {
@@ -62,10 +62,10 @@ class LeaFactory {
     }
 
     public static final class Block
-            extends LeaFactory {
+            extends ModeFactory {
 
         private static BlockCipherModeBlock newInstance(final String name) throws NoSuchAlgorithmException {
-            return LeaFactory.newInstance(BlockCipherModeBlock.class, name);
+            return ModeFactory.newInstance(BlockCipherModeBlock.class, name);
         }
 
         private static BlockCipherModeBlock newInstance(final String name, final BlockCipher.Mode mode, final byte[] key,
@@ -125,10 +125,10 @@ class LeaFactory {
     }
 
     public static final class Stream
-            extends LeaFactory {
+            extends ModeFactory {
 
         private static BlockCipherModeStream newInstance(final String name) throws NoSuchAlgorithmException {
-            return LeaFactory.newInstance(BlockCipherModeStream.class, name);
+            return ModeFactory.newInstance(BlockCipherModeStream.class, name);
         }
 
         private static BlockCipherModeStream newInstance(final String name, final BlockCipher.Mode mode, final byte[] key,
@@ -187,7 +187,7 @@ class LeaFactory {
         }
     }
 
-    private LeaFactory() {
+    private ModeFactory() {
         throw new AssertionError("instantiation is not allowed");
     }
 }

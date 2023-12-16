@@ -1,9 +1,10 @@
 package kr.re.nsr.crypto.symm;
 
-import com.github.jinahya.kisa.lea.LEAConstants;
+import com.github.jinahya.kisa.lea.LeaConstants;
 import kr.re.nsr.crypto.BlockCipher;
 import kr.re.nsr.crypto.padding.PKCS5Padding;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -21,7 +22,7 @@ class LEA_ECB_Test {
         final var random = SecureRandom.getInstanceStrong();
         final var cipher = new LEA.ECB();
         cipher.init(BlockCipher.Mode.ENCRYPT, key);
-        cipher.setPadding(new PKCS5Padding(LEAConstants.BLOCK_BYTES));
+        cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
         for (int i = 0; i < 4; i++) {
             final var msg = new byte[random.nextInt(128)];
             random.nextBytes(msg);
@@ -47,12 +48,12 @@ class LEA_ECB_Test {
         final byte[] encrypted;
         {
             cipher.init(BlockCipher.Mode.ENCRYPT, key);
-            cipher.setPadding(new PKCS5Padding(LEAConstants.BLOCK_BYTES));
+            cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
             encrypted = cipher.doFinal(plain);
             log.debug("encrypted: {}", encrypted);
             assertThat(encrypted.length)
                     .satisfies(l -> {
-                        assertThat(l % LEAConstants.BLOCK_BYTES)
+                        assertThat(l % LeaConstants.BLOCK_BYTES)
                                 .isZero();
                     });
         }
@@ -60,10 +61,27 @@ class LEA_ECB_Test {
         {
             cipher.reset();
             cipher.init(BlockCipher.Mode.DECRYPT, key);
-            cipher.setPadding(new PKCS5Padding(LEAConstants.BLOCK_BYTES));
+            cipher.setPadding(new PKCS5Padding(LeaConstants.BLOCK_BYTES));
             decrypted = cipher.doFinal(encrypted);
             log.debug("decrypted: {}", decrypted);
         }
+        assertThat(decrypted).isEqualTo(plain);
+    }
+
+    @DisplayName("ECB without Padding")
+    @MethodSource({"kr.re.nsr.crypto.symm.LeaTests#keyBytesStream"})
+    @ParameterizedTest
+    void withoutPadding__(final byte[] key) throws Exception {
+        final var random = SecureRandom.getInstanceStrong();
+        final var cipher = new LEA.ECB();
+        cipher.init(BlockCipher.Mode.ENCRYPT, key);
+        final byte[] plain = new byte[random.nextInt(128) << 4];
+        assert plain.length % LeaConstants.BLOCK_BYTES == 0;
+        random.nextBytes(plain);
+        final byte[] encrypted = cipher.doFinal(plain);
+        assert encrypted.length % LeaConstants.BLOCK_BYTES == 0;
+        cipher.init(BlockCipher.Mode.DECRYPT, key);
+        final byte[] decrypted = cipher.doFinal(encrypted);
         assertThat(decrypted).isEqualTo(plain);
     }
 }
